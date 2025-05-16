@@ -1,0 +1,454 @@
+/* == CSS == */
+@font-face {
+    font-family: 'Hashi';
+    src: url('/Fonts/Hashi-Regular.otf');
+}
+
+/* HASHI */
+
+@font-face {
+    font-family: 'CSBold';
+    src: url('/Fonts/Bold.otf');
+}
+
+/* BOLD */
+
+@font-face {
+    font-family: 'CSLight';
+    src: url('/Fonts/Light.otf');
+}
+
+/* LIGHT */
+
+@font-face {
+    font-family: 'CSMedium';
+    src: url('/Fonts/Medium.otf');
+}
+
+/* MEDIUM */
+
+@font-face {
+    font-family: 'CSRegular';
+    src: url('/Fonts/Regular.otf');
+}
+
+/* REGULAR */
+
+body {
+    background: linear-gradient(to bottom, #ffffff 0%, #fed5df 100%);
+    background-attachment: fixed;
+    background-size: cover;
+    height: 100vh;
+    margin: 0;
+    padding-top: 70px;
+}
+
+html,
+body {
+    overflow-x: hidden;
+}
+
+main {
+    margin-left: 250px;
+    padding: 20px;
+    width: calc(100% - 250);
+}
+
+/* == LOGO == */
+.logo {
+    display: block;
+    width: 500px;
+    height: auto;
+    margin: 50px auto 20px auto;
+}
+
+/* == ALL BUTTONS == */
+.btn {
+    background-color: #95BC98 !important;
+    color: #ffffff !important;
+    font-family: 'CSMedium' !important;
+    border: none !important;
+    padding: 5px;
+}
+
+.btn:hover {
+    background-color: #78aa7c !important;
+}
+
+/* == LINKS ==  */
+a:link {
+    color: #5e548e;
+}
+
+a:visited,
+.a:hover {
+    color: #815ac0;
+}
+
+/* == */
+
+
+/* == FORM STYLING == */
+label {
+    font-family: 'CSRegular';
+    letter-spacing: 3px;
+    color: #f4acb7 !important;
+}
+
+input {
+    margin: 5px !important;
+    border-color: #e3d6f3 !important;
+    border-width: 2px !important;
+    color: #b7a5ce !important;
+}
+
+.form-floating .form-control {
+    background-color: #ffffff;
+    font-weight: bold;
+}
+
+#loginFormContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+}
+
+
+#loginForm input {
+    width: 100%;
+    max-width: 400px;
+}
+
+#alertsContainer {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    width: 100%;
+    max-width: 400px;
+    padding-top: 15px;
+}
+
+.alert {
+    margin-top: 10px;
+}
+
+/* == NAV BAR == */
+#navbar {
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#inputHomepage {
+    border-radius: 15px !important;
+}
+
+#searchButton {
+    margin: 7px !important;
+    font-family: 'CSMedium' !important;
+    letter-spacing: 1px !important;
+}
+
+/* == SIDE BAR == */
+#sidebar {
+    background-color: transparent !important;
+    color: #f7819e;
+    font-family: 'CSMedium' !important;
+    letter-spacing: 2px !important;
+    top: 88px;
+    width: 250px;
+    z-index: 999;
+    margin-right: 10px;
+}
+
+.sidebar-link {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    color: #9f86c0 !important;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.sidebar-link:hover {
+    background-color: #c2b0da;
+    color: white !important;
+}
+
+.sidebar-link:active {
+    background-color: #9f86c0;
+    color: white;
+}
+
+/* == FEED CONTAINER == */
+.feedContainer {
+    background-color: transparent;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+#mainContent {
+    margin-top: 80px;
+    margin-left: 200px !important; 
+    margin-right: 310px !important;  
+    padding: 20px;
+    border-radius: 8px;
+    width: 800px;
+    z-index: 1;
+    position: relative;
+}
+
+.card {
+    width: 100%;
+}
+
+#feedCard,
+#mainContent {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+#postForm {
+    margin: 0 auto;
+    padding: 20px; 
+    background-color: white; 
+    border: 1px solid #ccc; 
+    border-radius: 8px; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);  
+    box-sizing: border-box;
+}
+
+#postForm .btn-group {
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+}
+
+#postForm .btn-group label {
+    margin-right: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #78aa7c;
+    color: white;
+    cursor: pointer;
+    letter-spacing: 1px;
+}
+
+#postForm .logoPostForm {
+    display: block;
+    width: 50px;
+    height: 30px;
+    margin: 0 auto 10px;
+}
+
+#postContent {
+    width: 100%;
+    height: 150px;
+    resize: none;
+    border-radius: 15px;
+    padding: 10px;
+}
+
+.post {
+    position: relative;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: #f9f9f9;
+    max-width: 500px;
+    margin: 0 auto;
+    margin-bottom: 15px;
+}
+
+.post-actions {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-top: 10px;
+    /* Space between the post content and the icons */
+}
+
+/* =========== RIGHT SIDEBAR =========== */
+.card {
+    border-radius: 5px;
+    width: 300px;
+    border: none;
+}
+
+body {
+
+    background-color: #eee;
+}
+
+.card {
+
+    border-radius: 5px;
+    width: 300px;
+    border: none;
+}
+
+
+.about {
+
+    line-height: 19px;
+}
+
+.follow {
+
+    height: 31px;
+    border-radius: 22px;
+}
+
+hr {
+
+    color: #c5c4c4;
+}
+
+/* == OTHER == */
+p,
+.lead,
+.header-text {
+    font-family: 'CSLight' !important;
+    color: #9f86c0 !important;
+}
+
+/* Icon styling */
+.fa-heart,
+.fa-comment {
+    cursor: pointer;
+    font-size: 20px;
+    color: #9f86c0;
+}
+
+/* Comment form styles */
+.comment-form {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+/*  POST STYLING  */
+.postUsername {
+    font-weight: bold;
+    font-size: 14px;
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+    color: #f7819e !important;
+}
+
+.postImage {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.postTimestamp {
+    font-size: 11px;
+    color: #8a817c !important;
+    margin-top: 5px;
+}
+
+.commentContainer {
+    border: 1px solid #dfd8e7;
+    padding: 5px;
+    border-radius: 5px;
+    background: #f1f1f1 !important;
+    margin-top: 5px;
+}
+
+.submit-comment {
+    background-color: #95BC98 !important;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.comment-textarea {
+    border: 1px #9f86c0 !important;
+}
+
+.comment-username {
+    font-weight: bold;
+    font-size: 12px;
+    margin-bottom: 5px;
+    color: #78aa7c !important;
+    letter-spacing: 2px;
+}
+
+.comment-text {
+    font-size: 12px;
+    color: #8a817c !important;
+}
+
+/* PROFILE STYLING */
+#profilePage {
+    width: 100%;
+    padding: 0;
+}
+
+.profile-container {
+    border: 1px #ccc;
+    background-color: white !important;
+    border-radius: 5px;
+}
+
+.fixed-image {
+    width: 150px;  
+    height: 150px; 
+    object-fit: cover; 
+}
+
+#editProfileContainer {
+    background-color: white !important;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+#profileName {
+    color: white !important;
+}
+
+
+/*  ==== SEARCH RESULTS ==== */
+#searchResultsContainer {
+    display: none;  
+    position: absolute;
+    z-index: 1000;
+    width: 948px;
+    top: 80px;
+    left: 250px;
+    margin-top: 5px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.search-result {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.search-result:hover {
+    background-color: #f5f5f5;
+}
+
+.view-profile-link {
+    color: #5e548e;
+    text-decoration: none;
+}
+
+.view-profile-link:hover {
+    text-decoration: underline;
+}

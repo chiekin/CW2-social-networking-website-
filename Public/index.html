@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;">
+    <title>Daikonnect</title>
+
+    <!-- === LINKS === -->
+    <link rel="stylesheet" href="/styles.css">
+    <!-- HOMEPAGE ICON-->
+    <link rel="icon" href="/Images/sprout2.png">
+    <!-- BOOTSTRAP -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- EYE ICON FONT -->
+    <script src="https://kit.fontawesome.com/99c02f652f.js" crossorigin="anonymous"></script>
+    <!-- JQUERY -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- SOCKET IO -->
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- JWT DECODE LIB -->
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+
+</head>
+
+<body>
+    <header>
+        <!-- ============================= -->
+        <!-- NAV BAR (WEBSITE HEADER) -->
+        <!-- ============================= -->
+        <nav class="navbar fixed-top navbar-light transparent-navbar d-none" id="navbar">
+            <div class="container-fluid" id="websiteHeader">
+
+                <!-- == LOGO AND WEBSITE NAME == -->
+                <a class="navbar-brand d-flex align-items-center" href="#">
+                    <img src="/Images/sprout2.png" alt="homeLogo" width="100" height="60"
+                        class="d-inline-block align-text-top">
+                    <span class="ms-2" style="font-family: 'CSBold'; color: #f7819e;">Daikonnect</span>
+                </a>
+
+                <!-- == SEARCH INPUT AND SEARCH BUTTON == -->
+                <form class="d-flex w-50">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+                        id="inputHomepage">
+                    <button class="btn btn-sm btn-outline-secondary" type="submit" id="searchButton"
+                        style="background-color: transparent !important; color: #9f86c0 !important;">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form>
+
+                <!-- == NAV ITEMS == -->
+                <ul class="nav nav-pills ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="#"><i class="fa-solid fa-house"></i></a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-regular fa-user"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
+                            <li><a class="dropdown-item" href="#">Edit profile</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" id="signOut" href="#">Sign out</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- == SEARCH RESULTS CONTAINER == -->
+        <div id="searchResultsContainer" class="w-50">
+        </div>
+        <!-- Container for displaying search results like a dropdown -->
+
+        <!-- == LOGO IN THE FIRST WEBSITE CONTACT == -->
+        <img src="/Images/logo.png" id="logoHeader" class="logo" style="cursor: pointer;" />
+    </header>
+
+    <aside>
+        <!-- ============================= -->
+        <!-- LEFT SIDEBAR -->
+        <!-- ============================= -->
+        <div id="sidebar" class="position-fixed d-flex flex-column p-3 d-none">
+            <a href="#" id="sidenavFeed" class="sidebar-link"><i class="fa-solid fa-mug-hot"></i> Newsfeed</a>
+            <a href="#" id="sidenavNotifications" class="sidebar-link"><i class="fa-solid fa-bell"></i>
+                Notifications</a>
+            <a href="#" id="sidenavProfile" class="sidebar-link"><i class="fa-solid fa-user"></i> Profile</a>
+        </div>
+    </aside>
+
+    <main>
+        <!-- ============================= -->
+        <!-- NEWSFEED SECTION -->
+        <!-- ============================= -->
+        <div id="mainContent" class="col-10 feedContainer d-none">
+            <!-- POST FORM -->
+            <form id="postForm" class="mb-4">
+                <div class="mb-3">
+                    <!-- Logo Container -->
+                    <div class="logo-container">
+                        <img src="/Images/sprout2.png" alt="logo" class="logoPostForm">
+                    </div>
+                    <textarea id="postContent" class="form-control" placeholder="Share something..." rows="3"
+                        required></textarea>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <!-- File Upload Button -->
+                    <div class="btn-group">
+                        <label for="formFileMultiple" class="form-label btn btn-outline-secondary">
+                            <i class="fa-regular fa-image"></i>
+                        </label>
+                        <input class="form-control d-none" type="file" id="formFileMultiple" multiple>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fa-solid fa-seedling"></i> Plant
+                    </button>
+                </div>
+
+                <!-- Image Preview Container -->
+                <div id="imagePreviewContainer" class="d-none" style="display: flex; flex-wrap: wrap; gap: 10px;">
+                </div>
+            </form>
+
+            <!-- FEED -->
+            <div id="feed"></div>
+
+            <!-- ============================= -->
+            <!-- PROFILE SECTION -->
+            <!-- ============================= -->
+            <!-- PROFILE LOGGED IN USER POV -->
+            <div class="container-fluid py-5 h-100 d-none" id="profilePage">
+                <div class="profile-container">
+                    <div class="profile-section">
+                        <!-- Profile Image Section -->
+                        <div class="rounded-top text-white d-flex flex-row"
+                            style="background-color: #f7819e; height:200px;">
+                            <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
+                                <img src="/Images/default-profile.png" alt="Generic placeholder image"
+                                    class="img-fluid img-thumbnail mt-4 mb-2 fixed-image"
+                                    style="width: 150px; z-index: 1">
+                                <button type="button" data-mdb-button-init data-mdb-ripple-init
+                                    class="btn btn-outline-dark text-white" data-mdb-ripple-color="dark"
+                                    style="z-index: 1;" id="editProfile">
+                                    Edit profile
+                                </button>
+                            </div>
+                            <div class="ms-3" style="margin-top: 130px;">
+                                <h5 id="profileName"></h5>
+                                <p id="ProfileUsername"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Profile Stats Section -->
+                    <div class="p-4 text-black bg-body-tertiary">
+                        <div class="d-flex justify-content-end text-center py-1 text-body">
+                            <div>
+                                <p class="mb-1 h5" id="postsCount"></p>
+                                <p class="small text-muted mb-0">Posts</p>
+                            </div>
+                            <div class="px-3">
+                                <p class="mb-1 h5" id="followersCount"></p>
+                                <p class="small text-muted mb-0">Followers</p>
+                            </div>
+                            <div>
+                                <p class="mb-1 h5" id="followingsCount"></p>
+                                <p class="small text-muted mb-0">Following</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body p-4 text-black">
+                        <div class="mb-5 text-body">
+                            <p class="lead fw-normal mb-1">About</p>
+                            <div class="p-4 bg-body-tertiary">
+                                <p class="userBio"></p>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mb-4 text-body">
+                            <p class="lead fw-normal mb-0">Posts</p>
+                        </div>
+                        <div class="text-center" id="userProfilePosts"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============================= -->
+            <!-- EDIT PROFILE CONTAINER -->
+            <!-- ============================= -->
+            <div class="container rounded justify-content-center align-items-center mb-4 mt-4 p-4 d-none"
+                id="editProfileContainer">
+                <div class="headerEditProfile">
+                    <h5 style="color: #f7819e !important;">Personal Details</h5>
+                    <span style="color: #666266;">Tell us a little bit about yourself so we can make your profile truly
+                        yours!</span>
+                </div>
+                <br><br>
+
+                <form id="editProfileForm">
+                    <!-- PROFILE PICTURE -->
+                    <div class="mb-3">
+                        <label for="userPictureUpload" class="form-label">Upload Profile Picture</label>
+                        <input class="form-control" type="file" id="userPictureUpload">
+                        <small id="formFileHelp" class="form-text text-muted">Upload a clear photo for your
+                            profile.</small>
+                    </div>
+                    <br>
+
+                    <!-- FIRST NAME AND LAST NAME -->
+                    <div class="row">
+                        <div class="col">
+                            <label for="firstNameProfile" class="form-label">First name</label>
+                            <input type="text" name="firstNameProfile" id="firstNameProfile" class="form-control"
+                                placeholder="First name" aria-label="First name">
+                        </div>
+                        <div class="col">
+                            <label for="lastNameProfile" class="form-label">Last name</label>
+                            <input type="text" class="form-control" name="lastNameProfile" id="lastNameProfile"
+                                placeholder="Last name" aria-label="Last name">
+                        </div>
+                    </div>
+                    <br>
+
+                    <!-- BIO -->
+                    <div class="mb-3">
+                        <label for="userBio" class="form-label">Bio</label>
+                        <textarea class="form-control" id="userBio" name="userBio" rows="3"
+                            placeholder="Share something about yourself—your hobbies, interests, or what makes you unique!"></textarea>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button class="btn btn-primary" type="submit" id="saveProfile">Save Profile</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- ============================= -->
+            <!-- PROFILE OTHER USER POV -->
+            <!-- ============================= -->
+            <div class="container-fluid py-5 h-100 d-none" id="userProfilePage">
+                <div class="profile-container">
+                    <div class="profile-section">
+                        <!-- Profile Image Section -->
+                        <div class="rounded-top text-white d-flex flex-row"
+                            style="background-color: #f7819e  ; height:200px;">
+                            <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
+                                <img src="/Images/default-profile.png" alt="Generic placeholder image"
+                                    class="img-fluid img-thumbnail mt-4 mb-2 fixed-image"
+                                    style="width: 150px; z-index: 1">
+                                <button type="button" data-mdb-button-init data-mdb-ripple-init
+                                    class="btn btn-outline-dark text-white" data-mdb-ripple-color="dark"
+                                    style="z-index: 1;" id="followUserButton">
+                                    Follow
+                                </button>
+                            </div>
+                            <div class="ms-3" style="margin-top: 130px;">
+                                <h5 id="userProfileName"></h5>
+                                <p id="userProfileUsername"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Profile Stats Section -->
+                    <div class="p-4 text-black bg-body-tertiary">
+                        <div class="d-flex justify-content-end text-center py-1 text-body">
+                            <div>
+                                <p class="mb-1 h5" id="postsCount"></p>
+                                <p class="small text-muted mb-0">Posts</p>
+                            </div>
+                            <div class="px-3">
+                                <p class="mb-1 h5" id="followersCount"></p>
+                                <p class="small text-muted mb-0">Followers</p>
+                            </div>
+                            <div>
+                                <p class="mb-1 h5" id="followingsCount"></p>
+                                <p class="small text-muted mb-0">Following</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body p-4 text-black">
+                        <div class="mb-5 text-body">
+                            <p class="lead fw-normal mb-1">About</p>
+                            <div class="p-4 bg-body-tertiary">
+                                <p class="userBio"></p>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mb-4 text-body">
+                            <p class="lead fw-normal mb-0">Posts</p>
+                        </div>
+                        <div class="text-center" id="userProfilePosts"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+
+
+    <!-- ============================= -->
+    <!-- MAIN CONTAINER WITH CREATE ACC BTN AND LOGIN LINK-->
+    <!-- ============================= -->
+    <div id="mainContainer" class="container-sm d-flex flex-column align-items-center fade show">
+        <p class="h3 fw-bold header-text">A Garden of Sharing and Connections</p>
+        <br>
+        <button id="createAccountBtn" class="btn btn-primary btn-lg mb-3">Create account</button>
+        <p class="lead">Already have an account? <a href="#" id="loginLink">Log in</a></p>
+    </div>
+
+    <!-- ============================= -->
+    <!-- HIDDEN REGISTRATION FORM -->
+    <!-- ============================= -->
+    <div id="registrationFormContainer" class="container-sm d-flex flex-column align-items-center fade">
+        <p class="h3 fw-bold header-text">Create an account</p>
+        <p>Become a seedling 🌱</p>
+
+        <form action="/M00671293/register" method="POST" id="registrationForm">
+            <!-- =========================== -->
+            <!-- FIRST NAME AND LAST NAME-->
+            <!-- =========================== -->
+            <div class="row">
+                <div class="col-6 form-floating">
+                    <input type="text" class="form-control" name="firstName" id="firstName"
+                        placeholder="Enter your first name" max-length="20" autofocus required>
+                    <label for="firstName" class="firstNameInput mx-3 my-2">First Name</label>
+                </div>
+
+                <!-- LAST NAME -->
+                <div class="col-6 form-floating">
+                    <input type="text" class="form-control" name="lastName" id="lastName"
+                        placeholder="Enter your last name" required>
+                    <label for="lastName" class="lastNameInput mx-3 my-2">Last Name</label>
+                </div>
+            </div>
+
+            <!-- ============================= -->
+            <!-- USERNAME -->
+            <!-- ============================= -->
+            <div class="form-floating">
+                <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username"
+                    autocomplete="on" required>
+                <label for="username" class="usernameInput mx-1">Username</label>
+            </div>
+
+            <!-- ============================= -->
+            <!-- EMAIL -->
+            <!-- ============================= -->
+            <div class="form-floating">
+                <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com"
+                    autocomplete="on" required>
+                <label for="email" class="mx-1">Email address</label>
+            </div>
+
+            <!-- ============================= -->
+            <!-- PASSWORD -->
+            <!-- ============================= -->
+            <div class="form-floating">
+                <input type="password" class="form-control" id="password" placeholder="Enter your password"
+                    autocomplete="on" required>
+                <label for="password" class="mx-1">Password</label>
+                <!-- EYE ICON FOR PASSWORD TOGGLE VISIBILITY -->
+                <i id="togglePassword" class="fa-regular fa-eye position-absolute"
+                    style="right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #f4acb7;"></i>
+            </div>
+
+            <div class="form-floating">
+                <input type="password" class="form-control" id="confirmPassword" placeholder="confirm password"
+                    autocomplete="on" required>
+                <label for="confirmPassword" class="mx-1">Confirm password</label>
+                <!-- EYE ICON FOR PASSWORD TOGGLE VISIBILITY -->
+                <i id="toggleConfirmPassword" class="fa-regular fa-eye position-absolute"
+                    style="right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #f4acb7;"></i>
+            </div>
+
+            <br>
+
+            <!-- ============================= -->
+            <!-- REGISTER SUBMIT BUTTON  -->
+            <!-- ============================= -->
+            <div class="text-center">
+                <!-- The regular sign-up button -->
+                <button type="submit" class="btn btn-primary" id="signUp">Sign Up</button>
+
+                <!-- The loading spinner button, initially hidden -->
+                <button class="btn btn-primary d-none" type="button" id="loadSignup" disabled>
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading...
+                </button>
+
+                <br>
+                <br>
+
+                <a href="#" id="loginLinkInRegister">Already have an account?</a>
+            </div>
+
+            <br>
+
+            <!-- ============================= -->
+            <!-- HIDDEN ALERTS  -->
+            <!-- ============================= -->
+            <!-- USERNAME ALREADY EXISTS  -->
+            <div id="usernameAlertAlreadyExist" class="alert alert-warning d-none" style="color: #9e2a2b;">
+                Username already exists. Please choose a different one.
+            </div>
+
+            <!-- EMAIL ALREADY EXISTS  -->
+            <div id="emailAlreadyExist" class="alert alert-warning d-none" style="color: #9e2a2b !important;">
+                Email already exists. Please enter a new one.
+            </div>
+
+            <!-- REGISTERED SUCCESSFULLY  -->
+            <div class="alert alert-success d-none" id="registeredSuccessfully">
+                <strong>Success!</strong> You have registered successfully!
+            </div>
+
+            <!-- USERNAME INVALID  -->
+            <div id="usernameAlertInvalid" class="alert alert-warning d-none" style="color: red;">
+                Username can only contain letters, numbers, and underscores. No special characters allowed.
+            </div>
+
+            <!-- PASSWORD INVALID -->
+            <div id="passwordInvalid" class="alert alert-warning d-none" style="color: red;">
+                Password must be at least 8 characters long.
+            </div>
+
+            <!-- INVALID EMAIL FORMAT  -->
+            <div id="emailAlertInvalid" class="alert alert-warning d-none" style="color: #9e2a2b;">
+                Invalid email format. Please try again.
+            </div>
+
+            <!-- REGISTRATION ERROR  -->
+            <div id="registrationError" class="alert alert-warning d-none" style="color: #9e2a2b;">
+                There was an error during registration.
+            </div>
+
+            <!-- ALL FIELDS REQUIRED  -->
+            <div id="allFieldsRequiredRegistration" class="alert alert-warning d-none" style="color: #9e2a2b;">
+                All fields are required.
+            </div>
+
+
+            <!-- PASSWORDS DO NOT MATCH -->
+            <div id="passwordsMismatchAlert" class="alert alert-warning d-none" style="color: #9e2a2b;">
+                Passwords do not match. Try again.
+            </div>
+
+        </form>
+    </div>
+
+    <!-- ============================= -->
+    <!-- HIDDEN LOGIN FORM -->
+    <!-- ============================= -->
+    <div id="loginFormContainer" class="container-sm d-flex flex-column align-items-center fade">
+        <p class="h3 fw-bold header-text">Log in 🌱</p>
+
+        <form action="/M00671293/login" method="POST" id="loginForm">
+            <!-- USERNAME -->
+            <div class="form-floating mb-3" style="width: 100%; max-width: 400px;">
+                <input type="text" class="form-control" name="username" id="usernameLogin"
+                    placeholder="Enter your username" required autocomplete="on">
+                <label for="usernameLogin" class="usernameLogInInput mx-1">Username</label>
+            </div>
+
+            <!-- PASSWORD -->
+            <div class="form-floating mb-3" style="width: 100%; max-width: 400px;">
+                <input type="password" class="form-control" name="password" id="passwordLogin"
+                    placeholder="Enter your password" required autocomplete="on">
+                <label for="passwordLogin" class="mx-1">Password</label>
+                <!-- EYE ICON FOR PASSWORD TOGGLE VISIBILITY -->
+                <i id="togglePasswordLogin" class="fa-regular fa-eye position-absolute"
+                    style="right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #f4acb7;"></i>
+            </div>
+
+            <!-- LOGIN BUTTON -->
+            <div class="text-center mb-3" style="width: 100%; max-width: 400px;">
+                <button type="submit" class="btn btn-primary" id="login">Log in</button>
+                <!-- LOADING SPINNER BUTTON -->
+                <button class="btn btn-primary d-none" type="button" disabled id="loadLogin">
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <span class="visually-hidden">Loading...</span>
+                </button>
+            </div>
+
+            <!-- ============================= -->
+            <!-- HIDDEN ALERTS -->
+            <!-- ============================= -->
+            <div class="alertsContainer" style="position: absolute; margin: 0 auto;">
+
+                <!-- LOGGED IN SUCCESSFULLY -->
+                <div class="alert alert-success d-none" id="loggedInSuccessfully">
+                    <strong>Success!</strong> Log in successful!
+                </div>
+
+                <!-- USER DOES NOT EXIST -->
+                <div id="usernameLoginDoesNotExist" class="alert alert-warning d-none" style="color: red !important;">
+                    User does not exist. Please try again.
+                </div>
+
+                <!-- INCORRECT PASSWORD -->
+                <div id="incorrectPasswordLogin" class="alert alert-warning d-none" style="color: red !important;">
+                    Incorrect password. Please try again.
+                </div>
+
+                <!-- UNEXPECTED ERROR LOGIN -->
+                <div id="unexpectedErrorLogin" class="alert alert-warning d-none" style="color: red !important;">
+                    An unexpected error occurred. Please try again later.
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <script type="module" src="/script.mjs"></script>
+    <script>
+        const socket = io();
+    </script>
+</body>
+
+</html>
