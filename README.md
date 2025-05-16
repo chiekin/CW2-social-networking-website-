@@ -33,5 +33,5 @@ Daikonnect is a full-featured social networking platform developed as part of th
 1. Clone this repository
 2. Install dependencies: `npm install`
 3. Configure environment variables
-4. Start the server: `npm start`
+4. Start the server: `nodemon server.mjs`
 5. Access the application at `http://localhost:8080`
