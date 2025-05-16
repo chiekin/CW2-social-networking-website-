@@ -35,3 +35,6 @@ Daikonnect is a full-featured social networking platform developed as part of th
 3. Configure environment variables
 4. Start the server: `nodemon server.mjs`
 5. Access the application at `http://localhost:8080`
+
+- Created by Chie
+- Email: juminchie@gmail.com
